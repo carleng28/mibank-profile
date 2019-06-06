@@ -1,43 +1,54 @@
-package com.miBank.mibankprofile.repository;
+package com.miBank.mibankprofile.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.miBank.profileservice.model.Profile;
 import com.miBank.profileservice.repository.ProfileRepository;
-
+import com.miBank.profileservice.service.ProfileService;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
-public class ProfileRepositoryTest {
+public class ProfileServiceTest {
+
+	@TestConfiguration
+	static class ProfileServiceContextConfiguration {
+		@Bean
+		public ProfileService profileService() {
+			return new ProfileService();
+		}
+	}
 
 	@Autowired
-	private TestEntityManager entityManager;
+	private ProfileService service;
 
-	@Autowired
+	@MockBean
 	private ProfileRepository repository;
 	
-	/*
-	 * Test - add new profile
-	 */
-	@Test
-	public void addNewProfileTest() {
-		
-		Profile profile = createNewProfile();
-		repository.save(profile);
-		Profile newProfile = entityManager.find(Profile.class, profile.getProfileId());
-		assertEquals(profile,newProfile);
-	}
 	
+	@Before
+	public void setup() {
+		Profile profile = createNewProfile();
+		Mockito.when(repository.save(profile)).thenReturn(profile);
+		
+	}
+
+	// save profile
+	@Test
+	public void saveDealershipServiceTest() {
+		Profile profile = createNewProfile();
+		Profile savedProfile = this.service.save(profile);
+
+		assertEquals(profile, savedProfile);
+	}
 	
 	
 	
