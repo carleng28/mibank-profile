@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mibank-profile-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mibank
+  template:
+    metadata:
+      labels:
+        app: mibank
+    spec:
+      containers:
+      - name: mibank-profile-container
+        image: carlosegomezp/profile-service:1.0.0
+        ports:                                      
+        - containerPort: 8090                       
+          name: http                                                             
+---
+kind: Service             
+apiVersion: v1            
+metadata:                 
+  name: mibank-profile-service     
+spec:                     
+  selector:               
+    app: mibank            
+  ports:                  
+  - protocol: TCP         
+    targetPort: 8090      
+    port: 80              
+    name: http                
+  type: NodePort      
