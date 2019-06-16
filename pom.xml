@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.miBank</groupId>
 	<artifactId>profile-service</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.01</version>
 	<name>mibank-profile</name>
 	<description>Demo project for Spring Boot</description>
 
